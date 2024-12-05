@@ -6,9 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
     "test": "jest",
     "prepare": "husky install",
+    "lint": "eslint .",
+    "format": "prettier --write .",
     "db:generate": "drizzle-kit generate:sqlite",
     "db:push": "node -r esbuild-register lib/db/migrate.ts"
   },
