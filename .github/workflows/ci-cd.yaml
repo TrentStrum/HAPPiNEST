@@ -24,8 +24,8 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          npm install
-          npm install -D eslint prettier @typescript-eslint/parser @typescript-eslint/eslint-plugin
+          npm install --legacy-peer-deps
+          npm install --legacy-peer-deps -D eslint@8.x prettier@2.x @typescript-eslint/parser@6.x @typescript-eslint/eslint-plugin@6.x
 
       - name: Run ESLint
         continue-on-error: true
@@ -53,8 +53,8 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          npm install
-          npm install -D jest @testing-library/react @testing-library/jest-dom
+          npm install --legacy-peer-deps
+          npm install --legacy-peer-deps -D jest@29.x @testing-library/react@14.x @testing-library/jest-dom@6.x
 
       - name: Setup Test Environment
         run: |
@@ -80,7 +80,7 @@ jobs:
           cache: 'npm'
 
       - name: Install Dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Setup Build Environment
         run: |
@@ -106,7 +106,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install Dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Run npm audit
         continue-on-error: true
