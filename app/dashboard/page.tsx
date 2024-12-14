@@ -1,25 +1,23 @@
-"use client";
-
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/hooks/use-auth";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Overview } from "@/components/dashboard/overview";
-import { RecentActivity } from "@/components/dashboard/recent-activity";
+import dynamic from 'next/dynamic';
 import { QuickActions } from "@/components/dashboard/quick-actions";
+import { RecentActivity } from "@/components/dashboard/recent-activity";
 
-export default function DashboardPage() {
-  const { user } = useAuth();
-  const router = useRouter();
+// Dynamically import the Overview component with no SSR
+const Overview = dynamic(
+  () => import('@/components/dashboard/overview'),
+  { ssr: false }
+);
 
-  useEffect(() => {
-    if (!user) {
-      router.push("/auth/login");
-    }
-  }, [user, router]);
+export default async function DashboardPage() {
+  const { userId } = await auth();
 
-  if (!user) return null;
+  if (!userId) {
+    redirect("/auth/sign-in");
+  }
 
   return (
     <div className="flex-1 space-y-4">

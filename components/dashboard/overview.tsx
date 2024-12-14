@@ -1,3 +1,5 @@
+"use client";
+
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
 const data = [
@@ -51,7 +53,7 @@ const data = [
   },
 ];
 
-export function Overview() {
+export default function Overview() {
   return (
     <ResponsiveContainer width="100%" height={350}>
       <BarChart data={data}>

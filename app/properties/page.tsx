@@ -7,15 +7,17 @@ import { Button } from "@/components/ui/button";
 import { PropertyCard } from "@/components/properties/property-card";
 import { AddPropertyDialog } from "@/components/properties/add-property-dialog";
 import { supabase } from "@/lib/supabase/client";
-import { useAuth } from "@/hooks/use-auth";
+import { useUser } from "@clerk/nextjs";
 
 export default function PropertiesPage() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const { user } = useAuth();
+  const { user } = useUser();
 
   const { data: properties, isLoading } = useQuery({
     queryKey: ["properties"],
     queryFn: async () => {
+      if (!user?.id) throw new Error("No user ID");
+      
       const { data, error } = await supabase
         .from("properties")
         .select(`
@@ -26,12 +28,12 @@ export default function PropertiesPage() {
             rent_amount
           )
         `)
-        .eq("landlord_id", user?.id);
+        .eq("landlord_id", user.id);
 
       if (error) throw error;
       return data;
     },
-    enabled: !!user,
+    enabled: !!user?.id,
   });
 
   if (isLoading) {

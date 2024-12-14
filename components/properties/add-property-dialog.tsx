@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase/client";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth, useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -41,7 +41,7 @@ interface AddPropertyDialogProps {
 }
 
 export function AddPropertyDialog({ open, onOpenChange }: AddPropertyDialogProps) {
-  const { user } = useAuth();
+  const { user } = useUser();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
@@ -59,12 +59,12 @@ export function AddPropertyDialog({ open, onOpenChange }: AddPropertyDialogProps
 
   const mutation = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
-      const { data, error } = await supabase.from("properties").insert([
-        {
-          ...values,
-          landlord_id: user?.id,
-        },
-      ]);
+      if (!user?.id) throw new Error("No user ID");
+
+      const { data, error } = await supabase.from("properties").insert({
+        ...values,
+        landlord_id: user.id,
+      });
 
       if (error) throw error;
       return data;

@@ -2,7 +2,7 @@
 
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
-import { Sun, Moon, Home, Settings, LogOut } from "lucide-react";
+import { Sun, Moon, Home, Settings } from "lucide-react";
 import Link from "next/link";
 import {
   NavigationMenu,
@@ -11,23 +11,23 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { useAuth } from "@/hooks/use-auth";
+import { UserButton, useAuth } from "@clerk/nextjs";
 
 export default function Navigation() {
   const { setTheme } = useTheme();
-  const { user, signOut } = useAuth();
+  const { isSignedIn } = useAuth();
 
   return (
     <nav className="border-b">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <Link href="/" className="flex items-center space-x-2">
           <Home className="h-6 w-6 text-primary" />
-          <span className="font-bold text-xl">HappyNest</span>
+          <span className="font-bold text-xl">HAPPiNEST</span>
         </Link>
 
         <NavigationMenu>
           <NavigationMenuList>
-            {user ? (
+            {isSignedIn ? (
               <>
                 <NavigationMenuItem>
                   <Link href="/dashboard" legacyBehavior passHref>
@@ -90,19 +90,22 @@ export default function Navigation() {
             <Moon className="h-5 w-5" />
           </Button>
 
-          {user ? (
+          {isSignedIn ? (
             <>
               <Button variant="ghost" size="icon">
                 <Settings className="h-5 w-5" />
               </Button>
-              <Button variant="ghost" size="icon" onClick={() => signOut()}>
-                <LogOut className="h-5 w-5" />
-              </Button>
+              <UserButton afterSignOutUrl="/" />
             </>
           ) : (
-            <Link href="/auth/login">
-              <Button>Login</Button>
-            </Link>
+            <>
+              <Link href="/auth/sign-in">
+                <Button variant="ghost">Sign In</Button>
+              </Link>
+              <Link href="/auth/sign-up">
+                <Button>Sign Up</Button>
+              </Link>
+            </>
           )}
         </div>
       </div>
