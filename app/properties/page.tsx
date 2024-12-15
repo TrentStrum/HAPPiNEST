@@ -1,40 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { Plus, Building2 } from "lucide-react";
+import { Building2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PropertyCard } from "@/components/properties/property-card";
 import { AddPropertyDialog } from "@/components/properties/add-property-dialog";
-import { supabase } from "@/lib/supabase/client";
-import { useUser } from "@clerk/nextjs";
+import { useProperties } from "@/hooks/react-query/use-properties";
 
 export default function PropertiesPage() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const { user } = useUser();
-
-  const { data: properties, isLoading } = useQuery({
-    queryKey: ["properties"],
-    queryFn: async () => {
-      if (!user?.id) throw new Error("No user ID");
-      
-      const { data, error } = await supabase
-        .from("properties")
-        .select(`
-          *,
-          units (
-            id,
-            unit_number,
-            rent_amount
-          )
-        `)
-        .eq("landlord_id", user.id);
-
-      if (error) throw error;
-      return data;
-    },
-    enabled: !!user?.id,
-  });
+  const { data: properties, isLoading } = useProperties();
 
   if (isLoading) {
     return <div>Loading...</div>;

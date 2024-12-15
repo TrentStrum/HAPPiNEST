@@ -7,43 +7,48 @@ import {
 } from "@/components/ui/card";
 import { Building2, FileText, WrenchIcon, DollarSign } from "lucide-react";
 import Link from "next/link";
+import { OverviewStats } from "@/app/types/dashboard.types";
 
-const actions = [
-  {
-    title: "Properties",
-    description: "Manage your properties",
-    icon: Building2,
-    href: "/properties",
-    color: "text-blue-500",
-    metric: "5 Units",
-  },
-  {
-    title: "Maintenance",
-    description: "View maintenance requests",
-    icon: WrenchIcon,
-    href: "/maintenance",
-    color: "text-orange-500",
-    metric: "2 Open",
-  },
-  {
-    title: "Leases",
-    description: "Manage active leases",
-    icon: FileText,
-    href: "/leases",
-    color: "text-green-500",
-    metric: "3 Active",
-  },
-  {
-    title: "Payments",
-    description: "View payment history",
-    icon: DollarSign,
-    href: "/payments",
-    color: "text-purple-500",
-    metric: "$4,500",
-  },
-];
+interface QuickActionsProps {
+  stats: OverviewStats;
+}
 
-export function QuickActions() {
+export function QuickActions({ stats }: QuickActionsProps) {
+  const actions = [
+    {
+      title: "Properties",
+      description: "Manage your properties",
+      icon: Building2,
+      href: "/properties",
+      color: "text-blue-500",
+      metric: `${stats.totalProperties} Units`,
+    },
+    {
+      title: "Maintenance",
+      description: "View maintenance requests",
+      icon: WrenchIcon,
+      href: "/maintenance",
+      color: "text-orange-500",
+      metric: "2 Open",
+    },
+    {
+      title: "Leases",
+      description: "Manage active leases",
+      icon: FileText,
+      href: "/leases",
+      color: "text-green-500",
+      metric: "3 Active",
+    },
+    {
+      title: "Payments",
+      description: "View payment history",
+      icon: DollarSign,
+      href: "/payments",
+      color: "text-purple-500",
+      metric: `$${stats.monthlyRevenue.toLocaleString()}`,
+    },
+  ];
+
   return (
     <>
       {actions.map((action) => (

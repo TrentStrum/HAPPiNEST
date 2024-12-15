@@ -1,45 +1,16 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
-const activity = [
-  {
-    id: "1",
-    type: "payment",
-    title: "Rent Payment Received",
-    description: "Unit 101 - $1,500",
-    timestamp: "2 hours ago",
-    user: {
-      name: "John Doe",
-      image: "https://i.pravatar.cc/150?u=1",
-    },
-  },
-  {
-    id: "2",
-    type: "maintenance",
-    title: "New Maintenance Request",
-    description: "Plumbing issue in Unit 203",
-    timestamp: "4 hours ago",
-    user: {
-      name: "Jane Smith",
-      image: "https://i.pravatar.cc/150?u=2",
-    },
-  },
-  {
-    id: "3",
-    type: "lease",
-    title: "Lease Signed",
-    description: "New tenant in Unit 305",
-    timestamp: "1 day ago",
-    user: {
-      name: "Mike Johnson",
-      image: "https://i.pravatar.cc/150?u=3",
-    },
-  },
-];
+import { useRecentActivity } from "@/hooks/react-query/use-properties";
+import { OverviewStats } from "@/app/types/dashboard.types";
 
 export function RecentActivity() {
+  const { data: activity, isLoading } = useRecentActivity();
+
+  if (isLoading) return <div>Loading...</div>;
+  if (!activity) return null;
+
   return (
     <div className="space-y-8">
-      {activity.map((item) => (
+      {activity.map((item: OverviewStats['recentActivity'][number]) => (
         <div key={item.id} className="flex items-center">
           <Avatar className="h-9 w-9">
             <AvatarImage src={item.user.image} alt={item.user.name} />

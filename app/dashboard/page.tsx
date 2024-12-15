@@ -1,22 +1,21 @@
-import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
+"use client";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import dynamic from 'next/dynamic';
 import { QuickActions } from "@/components/dashboard/quick-actions";
 import { RecentActivity } from "@/components/dashboard/recent-activity";
+import Overview from "@/components/dashboard/overview";
+import { useOverviewStats } from "@/hooks/react-query/use-properties";
 
-// Dynamically import the Overview component with no SSR
-const Overview = dynamic(
-  () => import('@/components/dashboard/overview'),
-  { ssr: false }
-);
+export default function DashboardPage() {
+  const { data: stats, isLoading } = useOverviewStats();
 
-export default async function DashboardPage() {
-  const { userId } = await auth();
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-  if (!userId) {
-    redirect("/auth/sign-in");
+  if (!stats) {
+    return null;
   }
 
   return (
@@ -32,7 +31,7 @@ export default async function DashboardPage() {
         </TabsList>
         <TabsContent value="overview" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            <QuickActions />
+            <QuickActions stats={stats} />
           </div>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
             <Card className="col-span-4">

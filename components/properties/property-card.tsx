@@ -8,29 +8,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Property } from "@/app/types/property.types";
 
-interface PropertyCardProps {
-  property: {
-    id: string;
-    name: string;
-    address: string;
-    city: string;
-    state: string;
-    zip: string;
-    units: Array<{
-      id: string;
-      unit_number: string;
-      rent_amount: number;
-    }>;
-  };
-}
-
-export function PropertyCard({ property }: PropertyCardProps) {
-  const totalUnits = property.units.length;
-  const totalRent = property.units.reduce(
+export function PropertyCard({ property }: { property: Property }) {
+  const totalUnits = property.units?.length ?? 0;
+  const totalRent = property.units?.reduce(
     (sum, unit) => sum + unit.rent_amount,
     0
-  );
+  ) ?? 0;
 
   return (
     <Link href={`/properties/${property.id}`}>

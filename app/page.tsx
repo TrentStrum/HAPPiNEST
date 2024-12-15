@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Building2, Shield, Wrench, DollarSign, FileText, BarChart3, MessageSquare } from "lucide-react";
+import { Building2, Wrench, DollarSign, FileText, BarChart3, MessageSquare } from "lucide-react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
@@ -75,12 +75,12 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-4">
               <Link href="/auth/register?role=landlord">
                 <Button size="lg" className="w-full sm:w-auto">
-                  I'm a Landlord
+                  I&apos;m a Landlord
                 </Button>
               </Link>
               <Link href="/auth/register?role=tenant">
                 <Button size="lg" variant="outline" className="w-full sm:w-auto">
-                  I'm a Tenant
+                  I&apos;m a Tenant
                 </Button>
               </Link>
             </div>

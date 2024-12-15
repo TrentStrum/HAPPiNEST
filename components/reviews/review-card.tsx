@@ -13,7 +13,8 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { ReportReviewDialog } from "./report-review-dialog";
-import { useAuth } from "@/hooks/use-auth";
+import { useUser } from "@clerk/nextjs";
+import Image from "next/image";
 
 interface ReviewCardProps {
   review: {
@@ -39,7 +40,7 @@ interface ReviewCardProps {
 
 export function ReviewCard({ review }: ReviewCardProps) {
   const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
-  const { user } = useAuth();
+  const { user } = useUser();
 
   const ratings = [
     { label: "Maintenance", value: review.maintenance_rating },
@@ -98,11 +99,13 @@ export function ReviewCard({ review }: ReviewCardProps) {
         {review.images && review.images.length > 0 && (
           <div className="flex gap-2 overflow-x-auto py-2">
             {review.images.map((image, index) => (
-              <img
+              <Image
                 key={index}
                 src={image}
                 alt={`Review image ${index + 1}`}
-                className="h-24 w-24 object-cover rounded-md"
+                width={96}
+                height={96}
+                className="object-cover rounded-md"
               />
             ))}
           </div>
